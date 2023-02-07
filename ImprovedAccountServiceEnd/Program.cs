@@ -1,4 +1,5 @@
 using BankAccountTransactionsEnd.Services;
+using ImprovedAccountServiceEnd.Services;
 using Microsoft.EntityFrameworkCore;
 using SkysFormsDemo.Data;
 using SkysFormsDemo.Services;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddTransient<DataInitializer>();
 builder.Services.AddTransient<IPersonService,PersonService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddTransient<IAccountService2, AccountService2>();
 
 var app = builder.Build();
 

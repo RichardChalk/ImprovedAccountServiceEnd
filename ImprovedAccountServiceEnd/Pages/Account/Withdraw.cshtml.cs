@@ -1,5 +1,4 @@
-using BankAccountTransactionsEnd.Data;
-using BankAccountTransactionsEnd.Services;
+using ImprovedAccountServiceEnd.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
@@ -9,11 +8,11 @@ namespace BankAccountTransactionsEnd.Pages.Account
     [BindProperties]
     public class WithdrawModel : PageModel
     {
-        private readonly IAccountService _accountService;
+        private readonly IAccountService2 _accountService2;
 
-        public WithdrawModel(IAccountService accountService)
+        public WithdrawModel(IAccountService2 accountService2)
         {
-            _accountService = accountService;
+            _accountService2 = accountService2;
         }
 
         [Range(100, 10000)]
@@ -22,27 +21,23 @@ namespace BankAccountTransactionsEnd.Pages.Account
         public decimal Balance { get; set; }
         public void OnGet(int accountId)
         {
-            var accountDb = _accountService.GetAccount(accountId);
-            Balance = accountDb.Balance;
-
-            // Option 2 - Cleaner?
-            // Balance = _accountService.GetAccount(accountId).Balance;
+            Balance = _accountService2.GetAccount(accountId).Balance;
         }
 
         public IActionResult OnPost(int accountId)
         {
-            var accountDb = _accountService.GetAccount(accountId);
-            if (accountDb.Balance < Amount)
+            var status = _accountService2.Withdraw(accountId, Amount);
+
+            if (status == ErrorCode.OK)
+            {
+                return RedirectToPage("Index");
+            }
+
+            if (status == ErrorCode.BalanceTooLow)
             {
                 ModelState.AddModelError("Amount", "You don't have that much money!");
             }
 
-            if (ModelState.IsValid)
-            {
-                accountDb.Balance -= Amount;
-                _accountService.Update(accountDb);
-                return RedirectToPage("Index");
-            }
             return Page();
         }
     }
