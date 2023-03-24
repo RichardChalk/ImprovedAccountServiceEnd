@@ -3,7 +3,8 @@ using ImprovedAccountServiceEnd.Services;
 public enum ErrorCode
 {
     OK,
-    BalanceTooLow
+    BalanceTooLow,
+    IncorrectAmount
 }
 namespace ImprovedAccountServiceEnd.Services
 {

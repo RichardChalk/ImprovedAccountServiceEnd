@@ -1,4 +1,5 @@
 using BankAccountTransactionsEnd.Services;
+using ImprovedAccountServiceEnd.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
@@ -8,11 +9,11 @@ namespace BankAccountTransactionsEnd.Pages.Account
     [BindProperties]
     public class DepositModel : PageModel
     {
-        private readonly IAccountService _accountService;
+        private readonly IAccountService2 _accountService2;
 
-        public DepositModel(IAccountService accountService)
+        public DepositModel(IAccountService2 accountService2)
         {
-            _accountService = accountService;
+            _accountService2 = accountService2;
         }
         
         [Range(100,10000)]
@@ -31,16 +32,19 @@ namespace BankAccountTransactionsEnd.Pages.Account
 
         public IActionResult OnPost(int accountId)
         {
-            if (DepositDate < DateTime.Now)
-            {
-                ModelState.AddModelError("DepositDate", "Cannot Deposit money in the past!");
-            }
+            var status = _accountService2.Deposit(accountId, Amount);
+
             if (ModelState.IsValid)
             {
-                var accountDb = _accountService.GetAccount(accountId);
-                accountDb.Balance += Amount;
-                _accountService.Update(accountDb);
-                return RedirectToPage("Index");
+                if (status == ErrorCode.OK)
+                {
+                    return RedirectToPage("Index");
+                }
+
+                if (status == ErrorCode.IncorrectAmount)
+                {
+                    ModelState.AddModelError("Amount", "Please enter a correct amount (100-10000)!");
+                }
             }
             return Page();
         }

@@ -28,14 +28,22 @@ namespace BankAccountTransactionsEnd.Pages.Account
         {
             var status = _accountService2.Withdraw(accountId, Amount);
 
-            if (status == ErrorCode.OK)
+            if (ModelState.IsValid)
             {
-                return RedirectToPage("Index");
-            }
+                if (status == ErrorCode.OK)
+                {
+                    return RedirectToPage("Index");
+                }
 
-            if (status == ErrorCode.BalanceTooLow)
-            {
-                ModelState.AddModelError("Amount", "You don't have that much money!");
+                if (status == ErrorCode.BalanceTooLow)
+                {
+                    ModelState.AddModelError("Amount", "You don't have that much money!");
+                }
+
+                if (status == ErrorCode.IncorrectAmount)
+                {
+                    ModelState.AddModelError("Amount", "Please enter a correct amount (100-10000)!");
+                }
             }
 
             return Page();

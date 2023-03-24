@@ -1,5 +1,6 @@
 ﻿using BankAccountTransactionsEnd.Data;
 using SkysFormsDemo.Data;
+using System.Diagnostics.Metrics;
 
 namespace ImprovedAccountServiceEnd.Services
 {
@@ -20,6 +21,12 @@ namespace ImprovedAccountServiceEnd.Services
                 return ErrorCode.BalanceTooLow;
             }
 
+            if (amount < 100 || amount > 10000)
+            {
+                return ErrorCode.IncorrectAmount;
+            }
+
+
             // Här skulle man tex. skapa en ny databas entitet som heter "Transaction"
             // ... och fyller den med info här...
             // tex. Date, Amount, Current Balance, Account number etc.
@@ -30,7 +37,20 @@ namespace ImprovedAccountServiceEnd.Services
 
         public ErrorCode Deposit(int accountId, decimal amount)
         {
-            throw new NotImplementedException();
+            var accountDb = _dbContext.Accounts.First(a => a.Id == accountId);
+
+            if (amount < 100 || amount > 10000)
+            {
+                return ErrorCode.IncorrectAmount;
+            }
+
+            // Här skulle man tex. skapa en ny databas entitet som heter "Transaction"
+            // ... och fyller den med info här...
+            // tex. Date, Amount, Current Balance, Account number etc.
+            accountDb.Balance += amount;
+            _dbContext.SaveChanges();
+            return ErrorCode.OK;
+
         }
         public Account GetAccount(int accountId)
         {
