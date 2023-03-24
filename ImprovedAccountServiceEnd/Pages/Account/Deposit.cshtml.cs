@@ -32,7 +32,7 @@ namespace BankAccountTransactionsEnd.Pages.Account
 
         public IActionResult OnPost(int accountId)
         {
-            var status = _accountService2.Deposit(accountId, Amount);
+            var status = _accountService2.Deposit(accountId, Amount, Comment);
 
             if (ModelState.IsValid)
             {
@@ -45,8 +45,15 @@ namespace BankAccountTransactionsEnd.Pages.Account
                 {
                     ModelState.AddModelError("Amount", "Please enter a correct amount (100-10000)!");
                 }
+
+                if (status == ErrorCode.CommentEmpty)
+                {
+                    ModelState.AddModelError("Comment", "Please enter a comment");
+                }
+
             }
             return Page();
         }
+
     }
 }

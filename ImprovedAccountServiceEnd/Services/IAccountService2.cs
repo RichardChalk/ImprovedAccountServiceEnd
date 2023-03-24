@@ -4,7 +4,8 @@ public enum ErrorCode
 {
     OK,
     BalanceTooLow,
-    IncorrectAmount
+    IncorrectAmount,
+    CommentEmpty
 }
 namespace ImprovedAccountServiceEnd.Services
 {
@@ -13,6 +14,6 @@ namespace ImprovedAccountServiceEnd.Services
     {
         Account GetAccount(int accountId);
         ErrorCode Withdraw(int accountId, decimal amount);
-        ErrorCode Deposit(int accountId, decimal amount);
+        ErrorCode Deposit(int accountId, decimal amount, string comment);
     }
 }

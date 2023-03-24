@@ -35,13 +35,18 @@ namespace ImprovedAccountServiceEnd.Services
             return ErrorCode.OK;
         }
 
-        public ErrorCode Deposit(int accountId, decimal amount)
+        public ErrorCode Deposit(int accountId, decimal amount, string comment)
         {
             var accountDb = _dbContext.Accounts.First(a => a.Id == accountId);
 
             if (amount < 100 || amount > 10000)
             {
                 return ErrorCode.IncorrectAmount;
+            }
+
+            if (String.IsNullOrEmpty(comment))
+            {
+                return ErrorCode.CommentEmpty;
             }
 
             // Här skulle man tex. skapa en ny databas entitet som heter "Transaction"
