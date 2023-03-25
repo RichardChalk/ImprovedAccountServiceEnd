@@ -40,17 +40,6 @@ namespace BankAccountTransactionsEnd.Pages.Account
                 {
                     return RedirectToPage("Index");
                 }
-
-                //if (status == ErrorCode.IncorrectAmount)
-                //{
-                //    ModelState.AddModelError("Amount", "Please enter a correct amount (100-10000)!");
-                //}
-
-                //if (status == ErrorCode.CommentEmpty)
-                //{
-                //    ModelState.AddModelError("Comment", "Please enter a comment");
-                //}
-
             }
             return Page();
         }
